@@ -1,0 +1,825 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>So, what’s new in ES2020? • Christophe Porteneuve @ Confoo Montréal 2018</title>
+
+		<meta name="description" content="ES2015 is awesome and ES2017 is super cool, but tons of interesting stuff is still incoming… most of which we can already play with!">
+		<meta name="author" content="Christophe Porteneuve">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link href='css/fonts.css' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/animate.min.css">
+		<link rel="stylesheet" href="css/theme/sky.css" id="theme-basis">
+		<link rel="stylesheet" href="css/theme/pw15.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/prism.css">
+
+    <base target="_blank"/>
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+    if (window.location.search.match(/print-pdf/gi)) {
+      var link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.type = 'text/css'
+      link.href = 'css/print/pdf.css'
+      document.getElementsByTagName('head')[0].appendChild(link)
+    }
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-43650325-23"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-43650325-23');
+    </script>
+	</head>
+
+	<body id="prioFix">
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section id="mainTitle">
+					<h1>
+            <span>So, what’s new in</span> ES2020?
+          </h1>
+					<p>
+						<small>A handpicked selection of cool stuff by <a href="http://tddsworld.com/">Christophe Porteneuve</a> at <a href="https://confoo.ca/en">Confoo Montréal 2018</a></small>
+					</p>
+				</section>
+
+				<section id="whoami">
+					<h2>whoami</h2>
+
+					<pre><code data-trim class="language-js">
+const christophe = {
+  family: { wife: 'Élodie', son: 'Maxence', [Symbol.unknown]: '*Secret*' },
+  city: 'Paris, FR',
+  company: 'Delicious Insights',
+  trainings: [
+    'Web Apps Modernes', 'Node.js', 'Git Total',
+    'ES Total', 'Webpack'
+  ],
+  webSince: 1995,
+  claimsToFame: [
+    'Prototype.js',
+    'Ruby On Rails',
+    'Prototype and Script.aculo.us',
+    'Paris Web',
+    'NodeSchool Paris'
+  ],
+}
+          </code></pre>
+				</section>
+
+        <section data-state="theme-color-blue-yellow">
+          <section id="tc39">
+            <h1>ES2020?!</h1>
+            <h3>ECMA, TC39, ECMAScript and JavaScript</h3>
+          </section>
+
+          <section>
+            <h2>ECMA and the TC39</h2>
+
+            <p>ECMA is an international standards body<br/>
+              (much like ISO, IETF, W3C or WHATWG, for instance)</p>
+            <p>ES = ECMAScript. The official standard for JavaScript*</p>
+            <p>
+              TC39 = Technical Committee 39. Caretaker for many standards:<br/>
+              ECMAScript (ECMA-262), Intl (ECMA-402), JSON (ECMA-404), etc.
+            </p>
+
+            <footer>* Which happens to be, these days, a U.S. trademark held by Oracle® Corporation.  Yeah.  I know.</footer>
+          </section>
+
+          <section>
+            <h2>The TC39 process</h2>
+
+            <p>Meetings at various locations every 2 months.  A yearly release, in June.</p>
+            <p>“ES6” ➡️ ES2015, “ES7” ➡️ ES2016, and now we say ES2017, etc.</p>
+            <p>It’s all <a href="https://github.com/tc39">public</a>. Language proposals go through <a href="https://tc39.github.io/process-document/">5 stages</a>:</p>
+
+            <table>
+              <thead>
+                <tr><th>Stage</th><th>Description</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>0 Strawman</th>
+                  <td>“It’d be dandy if we had a unicorn operator (🦄) to…”</td>
+                </tr>
+                <tr>
+                  <th>1 Proposal</th>
+                  <td>A TC39 member “champions” the proposal.  General API look and feel hammered down, and many/most cross-cutting concerns addressed.</td>
+                </tr>
+                <tr>
+                  <th>2 Draft</th>
+                  <td>Initial spec text, covers all critical aspects and technical semantics.</td>
+                </tr>
+                <tr>
+                  <th>3 Candidate</th>
+                  <td>Spec complete, verified by appropriate reviewers and greenlighted.  API finalized, no stone left unturned.</td>
+                </tr>
+                <tr>
+                  <th>4 Finished</th>
+                  <td>Full Test262 coverage, 2+ shipping implementations (e.g. V8 + SpiderMonkey), significant real-world usage feedback, Spec Editor imprimatur.  Usually goes into the next feature freeze (January or March).</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </section>
+
+        <section data-state="theme-color-silver-green">
+          <section id="es2017">
+            <h1>ES2017</h1>
+            <h3>(in case you missed it…)</h3>
+          </section>
+
+          <section id="trailing-commas">
+            <h2>Moar trailing commas!</h2>
+            <h4><a href="https://github.com/tc39/proposal-trailing-function-commas">spec</a></h4>
+
+            <div class="two-columns">
+              <div>
+                <pre><code class="language-js" data-trim data-keep-tags="u">
+function yowza(
+  key,
+  increment<u>,</u>
+) {
+  // …
+}
+                </code></pre>
+              </div>
+              <div>
+                <pre><code class="language-js" data-trim data-keep-tags="u">
+const yowza = (
+  key,
+  increment<u>,</u>
+) => …
+                </code></pre>
+
+                <pre><code class="language-js" data-trim data-keep-tags="u">
+yowza(
+  'itemScore',
+  +10<u>,</u>
+)
+                </code></pre>
+              </div>
+            </div>
+
+            <p>Don’t forget that since ES5 (2009…) you could already do these:</p>
+
+            <div class="two-columns">
+              <div>
+                <pre><code class="language-js" data-trim data-keep-tags="u">
+const roiDeLaClasse = {
+  first: 'Georges',
+  last: 'Abitbol'<u>,</u>
+}
+                </code></pre>
+              </div>
+              <div>
+                <pre><code class="language-js" data-trim data-keep-tags="u">
+const courses = [
+  'ES Total',
+  'Webpack'<u>,</u>
+]
+                </code></pre>
+              </div>
+            </div>
+
+            <footer>Prettier : <code>trailingCommas: 'all'</code></footer>
+          </section>
+
+          <section id="async-await">
+            <h2><code>async</code> / <code>await</code></h2>
+            <h4 lang="en"><a href="https://github.com/tc39/ecmascript-asyncawait">Async functions</a></h4>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+<u>async</u> function createEntry(req, res) {
+  <u>try</u> {
+    const urlReq = <u>await</u> fetch(req.body.url)
+    const html = <u>await</u> urlReq.text()
+    const analysis = unfluff(html)
+    const entry = <u>await</u> Entry.post({ … })
+    // …
+  } <u>catch</u> (err) {
+    req.flash('error', `Une erreur est survenue en traitant cette URL : ${err.message}`)
+    res.redirect('/entries/new')
+  }
+}
+            </code></pre>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+const [tags, entryCount, entries] = <u>await</u> Promise.all([
+  Entry.tags(), Entry.count(), Entry.getEntries(req.query),
+])
+            </code></pre>
+          </section>
+        </section> <!-- #es2017 -->
+
+        <section data-state="theme-color-forest-yellow">
+          <section id="es2018">
+            <h1>ES0218</h1>
+            <h4>(As per feature freezing in January 2018, may still expand)</h4>
+          </section>
+
+          <section id="async-iteration">
+            <h2>Async iteration</h2>
+            <h4><a href="https://github.com/tc39/proposal-async-iteration">Spec</a></h4>
+
+            <p>Easily queue / loop over async requests.<br/>Async iterables, iterators and generators use promises, so <code>async</code>/<code>await</code> work seamlessly with it.</p>
+
+            <div class="two-columns">
+              <div>
+                <pre><code class="language-js" data-trim data-keep-tags="u">
+for <u>await</u> (const line of readLines(filePath)) {
+  console.log(line)
+}
+                </code></pre>
+              </div>
+              <div>
+                <pre><code class="language-js" data-trim data-keep-tags="u">
+<u>async function*</u> readLines(path) {
+  let file = await fileOpen(path);
+
+  try {
+    while (!file.EOF) {
+      yield await file.readLine();
+    }
+  } finally {
+    await file.close();
+  }
+}
+                </code></pre>
+              </div>
+            </div>
+
+            <footer>
+              Native: FF 57+, Ch63+, SF TP. No Edge or Node yet.<br/>
+              Babel: <code>preset-env</code> (<code>shippedProposals</code>) / <code>plugin-transform-async-generator-functions</code>
+            </footer>
+          </section>
+
+          <section id="rest-spread-properties">
+            <h2>Rest / Spread Properties</h2>
+            <h4><a href="https://github.com/tc39/proposal-object-rest-spread">Spec</a></h4>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+// nonStandardAction = { type: 'progress', goalId: 1, increment: 2 }
+
+const { type, <u>...</u>payload } = nonStandardAction // => payload = { goalId: 1, increment: 2 }
+            </code></pre>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+function doStuff(url, options = {}) {
+  const opts = { <u>...</u>DEFAULT_OPTIONS, <u>...</u>options, regular: true }
+  // …
+}
+            </code></pre>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+return {
+  <u>...</u>state,
+  history: tallyHistory(state),
+  today: moment().format('YYYY-MM-DD'),
+  todaysProgress: {},
+}
+            </code></pre>
+
+            <p>
+              This is a new <strong>default</strong> behavior:
+              you could already implement <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/iterator">custom iterability</a> for your objects.
+            </p>
+
+            <footer>
+              Native: FF 57+, Ch63+, SF 11.1, Node 8. No Edge yet.<br/>
+              Babel: <code>preset-env</code> (<code>shippedProposals</code>) / <code>plugin-transform-object-rest-spread</code>
+            </footer>
+          </section>
+
+          <section id="regexp">
+            <h2>RegExp extravaganza!</h2>
+            <h4>
+              <a href="https://github.com/tc39/proposal-regexp-named-groups">RegExp named capture groups</a>,
+              <a href="https://github.com/tc39/proposal-regexp-unicode-property-escapes">RegExp Unicode property escapes</a>,<br/>
+              <a href="https://github.com/tc39/proposal-regexp-lookbehind">RegExp lookbehind assertions</a>,
+              <a href="https://github.com/tc39/proposal-regexp-dotall-flag">RegExp DotAll flag</a>
+            </h4>
+
+            <p>XRegExp, your days are numbered… 😉</p>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+const RE_ISO_DATE = /(?<u>&lt;year></u>\d{4})-(?<u>&lt;month></u>\d{2})-(?<u>&lt;day></u>\d{2})/u
+console.log(RE_ISO_DATE.exec('2017-10-05')<u>.groups</u>) // => { year: '2017', month: '10', day: '05' }
+'2017-10-05'.replace(RE_ISO_DATE, '<u>$&lt;day></u>/<u>$&lt;month></u>/<u>$&lt;year></u>') // => '05/10/2017'
+
+const RE_DIGITS = /^<u>\p{Decimal_Number}</u>+$/u
+RE_DIGITS.test('𝟏𝟐𝟑𝟜𝟝𝟞𝟩𝟪𝟫𝟬𝟭𝟮𝟯𝟺𝟻𝟼') // => true
+
+const RE_ANYTHING_GOES = /foo.bar/<u>s</u>
+RE_ANYTHING_GOES.test('foo\nbar') // => true
+            </code></pre>
+
+            <footer>
+              Native: Ch64+, SF 11.1 (except lookbehind). No Node, FF or Edge yet.<br/>
+              Babel: <code>preset-stage-3</code> + <code>plugin-transform-modern-regexp</code>
+            </footer>
+          </section>
+
+          <section id="es2018-misc">
+            <h2>Other ES2018 tidbits</h2>
+
+            <h4>
+              <a href="https://github.com/tc39/proposal-promise-finally">Promise#finally</a>,
+              <a href="https://tc39.github.io/proposal-template-literal-revision/">Template literals revision</a>
+            </h4>
+
+            <p>Always-invoked callback, much like <code>try…finally…</code> :</p>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+fetch('/api/v1/ohai')
+  .then(…)
+  .catch(…)
+  <u>.finally(…)</u>
+            </code></pre>
+
+            <p>Illegal escape sequences in tagged template strings (TTS) don’t break, they just invoke the tagger with no cooked fixed string, only the raw one, so you can do this:</p>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+latex`\unicode`             // Despite \un not being a valid Unicode escape
+windowsPath`C:\uuu\xxx\088` // Despite \uu, \xx and \08 not being valid escapes
+            </code></pre>
+
+            <p class="breathing">P.S.: you’ll find all of ES2018 explained well in <a href="http://exploringjs.com/es2018-es2019/">this book</a> by Dr. Axel Rauschmayer (free online).</p>
+
+             <footer>
+               Native: FF58+, Ch63+, SF 11.1. No Edge or Node yet.<br/>
+               Babel: <code>preset-env</code> (<code>shippedProposals</code>) for Promise#finally.  Nothing for revised TTS.
+             </footer>
+          </section>
+        </section> <!-- #es2018 -->
+
+        <section data-state="theme-color-blue-yellow">
+          <section id="es2019-es2020">
+            <h1>ES0219 and ES2020</h1>
+            <h3>chosen bits that’ll probably show up (stages 2–3)</h3>
+
+            <footer>(Next to no native support just now, FYI)</footer>
+          </section>
+
+
+          <section id="class-fields">
+            <h2>Class Fields</h2>
+            <h4><a href="https://github.com/tc39/proposal-class-fields">Spec</a></h4>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+class APIConnector extends Component {
+  // Public static field
+  <u>static propTypes =</u> {
+    apiKey: PropTypes.string.isRequired,
+  }
+
+  // Private (“for real”, a la C++ friend) instance field
+  <u>#secretToken =</u> null
+
+  // Public instance field (equiv. to this.awesome init inside constructor)
+  <u>awesome =</u> true
+
+  // …
+}
+            </code></pre>
+
+            <footer>Babel: stage 1 version available still (preset / <code>class-properties</code>), stage 2 WIP</footer>
+          </section>
+
+          <section id="private-methods">
+            <h2>Private methods and accessors</h2>
+            <h4><a href="https://github.com/tc39/proposal-private-methods">Spec</a></h4>
+
+            <p>La continuation logique des champs privés…</p>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+class APIConnector {
+  get <u>#</u>apiToken() {
+    …
+  }
+
+  set <u>#</u>apiToken(value) {
+    …
+  }
+
+  <u>#</u>checkConnectivity() {
+    …
+  }
+}
+            </code></pre>
+          </section>
+
+          <section id="dynamic-import">
+            <h2><code>import(…)</code></h2>
+            <h4><a href="https://github.com/tc39/proposal-dynamic-import">Dynamic import</a></h4>
+
+            <p> Lets us lazily import native ES modules (dynamic specifier / code splitting). </p>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+import(`./l10n/${currentUser.locale}`)
+  .then((locale) => app.l10n.use(locale))
+  .catch((err) => app.reportError(err))
+            </code></pre>
+
+            <p>As this is Promise-based, you can get even fancier:</p>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+try {
+  app.l10n.use(await import(`./l10n/${currentUser.locale}`))
+} catch (err) {
+  app.reportError(err)
+}
+            </code></pre>
+
+            <footer>Babel: <code>preset-stage-3</code> / <code>plugin-syntax-dynamic-import</code> (and <code>plugin-dynamic-import-node</code>).<br/>
+              “Native” with Webpack 2+.</footer>
+          </section>
+
+          <section id="optional-catch-binding">
+            <h2>Optional catch binding</h2>
+            <h4><a href="https://github.com/tc39/proposal-optional-catch-binding">spec</a></h4>
+
+            <p>Not using the exception?  No need to bind it now!</p>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+try {
+  return JSON.parse(await readFile(optionalConfigFilePath))
+} <u>catch</u> {
+  return {}
+}
+            </code></pre>
+
+            <footer>
+              Native: FF58, Ch66, SF 11.1.<br/>
+              Babel: <code>preset-env</code> (with <code>shippedProposals: true</code>)
+            </footer>
+          </section>
+
+          <section id="throw-expressions">
+            <h2><code>throw</code> expressions</h2>
+            <h4><a href="https://github.com/tc39/proposal-throw-expressions">Spec</a></h4>
+
+            <p>Not a statement anymore, but an expression.  Spares us superfluous function wrapping.</p>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+function save(fileName = <u>throw</u> new TypeError('File name required')) {
+  …
+}
+
+            </code></pre>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+function getEncoder(encoding) {
+  // Trigger warning: nested ternaries 😱
+  const encoder = encoding === 'utf8' ? new UTF8Encoder()
+                : encoding === 'utf16le' ? new UTF16Encoder(false)
+                : encoding === 'utf16be' ? new UTF16Encoder(true)
+                : <u>throw</u> new Error(`Unsupported encoding: ${encoding}`)
+  …
+}
+            </code></pre>
+          </section>
+
+          <section id="decorators">
+            <h2>Decorators</h2>
+            <h4><a href="https://github.com/tc39/proposal-decorators">Spec</a></h4>
+
+            <div class="two-columns">
+              <div>
+                <pre><code class="language-js" data-trim data-keep-tags="u">
+<u>@mixin</u>(SocialNetworkAddictMixin)
+class Person {
+  <u>@deprecate</u>
+  facepalm() { … }
+
+  <u>@throttle</u>('1hr', { leading: true })
+  checkFacebook() { … }
+
+  <u>@memoize</u>('15min')
+  checkTwitter() { … }
+}
+                </code></pre>
+              </div>
+              <div>
+                <pre><code class="language-js" data-trim data-keep-tags="u">
+class Person {
+  <u>@computedFrom</u>('firstName', 'lastName')
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`
+  }
+}
+                </code></pre>
+
+                <pre><code class="language-js" data-trim data-keep-tags="u">
+<u>@connect</u>(mapStateToProps, { logOut })
+class SettingsScreen extends Component {
+  <u>@autobind</u>
+  openGoalAdder() { … }
+
+  <u>@override</u>
+  componentWillReceiveProps() { … }
+}
+                </code></pre>
+              </div>
+            </div>
+
+            <footer>Babel : stage-1 version in preset, plus legacy plugin. stage-2 WIP.</footer>
+          </section>
+
+          <section id="numeric-separator">
+            <h2>Numeric separator</h2>
+            <h4><a href="https://github.com/tc39/proposal-numeric-separator">Spec</a></h4>
+
+            <p>Because JS is one of the few major languages without them! 😠</p>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+const FACTOR = <u>1_000_000_000</u>
+const FEE = <u>123_00</u>
+
+const FRACTION = <u>0.000_001</u>
+
+const BITS = <u>0b1010_0001_1000_0101</u>
+const FLAG = <u>0xDEAD_BEEF</u>
+            </code></pre>
+
+            <footer>Babel : <code>preset-stage-1</code> (now stage 2, but…), <code>plugin-transform-numeric-separator</code></footer>
+          </section>
+
+        </section> <!-- #es2019 -->
+
+        <section data-state="theme-color-silver-green">
+          <section id="esnext">
+            <h1>Later (maybe)</h1>
+            <h3>(stage 1)</h3>
+          </section>
+
+          <section id="optional-chaining">
+            <h2>Taking it easy with <code>null</code> and <code>undefined</code></h2>
+            <h4>
+              <a href="https://github.com/tc39/proposal-optional-chaining">Optional Chaining</a>
+              and
+              <a href="https://github.com/tc39/proposal-nullish-coalescing">Nullish Coalescing</a>
+            </h4>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+// Deep chaining despite missing slots? Hold my 🍺.
+const userStreet = user<u>?.</u>address<u>?.</u>street
+
+// Works for indirect indexing too
+const userProp = user<u>?.</u>[propName]
+
+// Optional method? There you go.
+iterator.return<u>?.</u>()
+
+// Default value IIF null/undefined?  Sure thing.
+const chunkMode = settings.optimization?.splitChunks?.chunks <u>??</u> 'async'
+            </code></pre>
+
+            <footer>Babel covers optional chaining: <code>preset-stage-1</code> or <code>transform-optional-chaining</code>. WIP on nullish coalescing.</footer>
+          </section>
+
+          <section id="protocols">
+            <h2>Véritables protocoles</h2>
+            <h4><a href="https://github.com/michaelficarra/proposal-first-class-protocols">First-class protocols</a></h4>
+
+            <div class="two-columns">
+              <div>
+                <pre><code class="language-js" data-trim data-keep-tags="u">
+<u>protocol</u> RubyStyleEnumerable {
+  // Symbole(s) à implémenter au cas par cas
+  _each
+
+  // Méthodes (implémentées) par-dessus
+  cycle (…) { … }
+  count () { … }
+  drop (…) { … }
+  each (…) { … }
+  map (…) { … }
+  …
+}
+                </code></pre>
+              </div>
+              <div>
+                <pre><code class="language-js" data-trim data-keep-tags="u">
+class Hash <u>implements RubyStyleEnumerable</u> {
+  // On implémente le symbole à notre sauce…
+  [RubyStyleEnumerable._each] () { … }
+
+  // …et on a le reste gratuitement 😉
+}
+                </code></pre>
+              </div>
+            </div>
+
+            <p>Another proposal, <a href="https://github.com/justinfagnani/proposal-mixins">maximally-minimal mixins</a>, covers some of the same needs.<br/>A unified proposal should emerge for stage 2.</p>
+          </section>
+
+          <section id="do-expressions">
+            <h2><code>do</code> expressions</h2>
+            <h4><a href="https://github.com/tc39/proposal-do-expressions">Spec</a></h4>
+
+            <div class="two-columns">
+              <div>
+                <pre><code class="language-js" data-trim data-keep-tags="u">
+const x = do {
+  const tmp = f()
+  tmp * tmp + 1
+}
+                </code></pre>
+
+                <p>Begone, nested ternaries!</p>
+
+                <pre><code class="language-js" data-trim data-keep-tags="u">
+const x = do {
+  if (foo()) { f() }
+  else if (bar()) { g() }
+  else { h() }
+}
+                </code></pre>
+
+                <p>Pretty cool for JSX too ➡️</p>
+              </div>
+              <div>
+                <pre><code class="language-jsx" data-trim data-keep-tags="u">
+return (
+  &lt;nav>
+    &lt;Home />
+    {
+      do {
+        if (loggedIn) {
+          &lt;LogoutButton />
+        } else {
+          &lt;LoginButton />
+        }
+      }
+    }
+  &lt;/nav>
+)
+                </code></pre>
+              </div>
+            </div>
+            <footer>Babel : <code>preset-stage-1</code>, <code>plugin-transform-do-expressions</code></footer>
+          </section>
+
+          <section id="pipeline">
+            <h2>Pipeline operator (FP FTW #1)</h2>
+            <h4><a href="https://github.com/tc39/proposal-pipeline-operator">Spec</a></h4>
+
+            <p>Super-readable function composition.  Inspired by similar features in OCaml, Elixir, Elm, F#…</p>
+            <p>Syntax is extremely in flux (<a href="https://github.com/tc39/proposal-pipeline-operator/wiki">4 competing proposals</a>).  Here’s an example:</p>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+// Old-school
+const result = exclaim(capitalize(doubleSay('hello')))
+
+// Hip
+const result = 'hello'
+  |> doubleSay
+  |> capitalize
+  |> exclaim
+            </code></pre>
+          </section>
+
+          <section id="partial-application">
+            <h2>Partial application (FP FTW #2)</h2>
+            <h4><a href="https://github.com/tc39/proposal-partial-application">Spec</a></h4>
+
+            <p>Avoids hacky <code>bind(…)</code> usage.  Much more readable, can be done <em>ad hoc</em>, etc:</p>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+const mul = (x, y) => x * y
+const mul3 = mul(<u>?</u>, 3)
+
+const fx = (prefix, seed, ...items)
+const oneSeededFx = fx(<u>?</u>, 1, <u>...</u>)
+            </code></pre>
+
+            <p>Actually super advanced, <strong>lazy evals its binding context</strong> and arguments.<br/>
+              Also combines <strong>deliciously</strong> with pipelines:</p>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+const newScore = player.score
+  |> add(7, ?)
+  |> clamp(0, 100, ?)
+            </code></pre>
+          </section>
+
+          <section id="function-binding">
+              <h2>Function binding (FP FTW #3)</h2>
+              <h4>
+                <a href="https://github.com/tc39/proposal-bind-operator">Spec</a>
+                • Warning: STAGE ZERO!
+              </h4>
+
+              <p>Use context-based free functions with ad-hoc binding.  Sort of an alternative to mixins.</p>
+
+              <pre><code class="language-js" data-trim data-keep-tags="u">
+import { map, takeWhile, forEach } from 'iterlib'
+
+getPlayers()
+  <u>::</u>map(x => x.character())
+  <u>::</u>takeWhile(x => x.strength > 100)
+  <u>::</u>forEach(x => console.log(x))
+              </code></pre>
+
+              <footer>Babel : <code>preset-stage-0</code>, <code>plugin-transform-function-bind</code></footer>
+            </section>
+
+            <section id="pattern-matching">
+              <h2>Pattern matching (FP FTW #4</h2>
+              <h4>
+                <a href="https://github.com/tc39/proposal-pattern-matching">Spec</a>
+                • Warning: STAGE ZERO!
+              </h4>
+
+              <p>Heavily inspired by Rust, F# and Haskell.  Code branching based on structural argument matching.<br/>
+                Early syntax looks like this:</p>
+
+              <pre><code class="language-js" data-trim data-keep-tags="u">
+const getLength = (vector) => <u>match (vector)</u> {
+  <u>{ x, y, z }:</u> Math.sqrt(x ** 2 + y ** 2 + z ** 2),
+  <u>{ x, y }:</u>    Math.sqrt(x ** 2 + y ** 2),
+  <u>[...]:</u>       vector.length,
+  <u>else:</u> {
+      throw new Error("Unknown vector type");
+  }
+}
+              </code></pre>
+            </section>
+          </section> <!-- #esnext -->
+
+        <section>
+          <h1>Thank you!</h1>
+          <h3>And may JS be with you.</h3>
+          <br>
+          <p>Christophe Porteneuve</p>
+          <p><a href="https://twitter.com/porteneuve">@porteneuve</a></p>
+
+          <p class="breathing">
+            Slides are up at <a href="http://bit.ly/confoo-es2020">bit.ly/confoo-es2020</a><br/>
+          </p>
+        </section>
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+    <script src="plugin/highlight/prism.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+      // Full list of configuration options available here: // https://github.com/hakimel/reveal.js#configuration
+      /* global Reveal */
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        width: '95%',
+        height: '90%',
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 900px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function () { return !document.body.classList } },
+          { src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]') } },
+          { src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]') } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function () { return !!document.body.classList } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function () { return !!document.body.classList } }
+        ]
+      })
+		</script>
+
+	</body>
+</html>

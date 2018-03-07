@@ -71,9 +71,11 @@
 
 					<pre><code data-trim class="language-js">
 const christophe = {
-  family: { wife: 'Élodie', son: 'Maxence', [Symbol.unknown]: '*Secret*' },
+  family: { wife: 'Élodie', son: 'Maxence', [Symbol.guess]: '*Shh*' },
   city: 'Paris, FR',
   company: 'Delicious Insights',
+  firstTimeInMontreal: true,
+  lastTimeInMontreal: Symbol.noWay,
   trainings: [
     'Web Apps Modernes', 'Node.js', 'Git Total',
     'ES Total', 'Webpack'
@@ -113,11 +115,17 @@ const christophe = {
           <section>
             <h2>The TC39 process</h2>
 
-            <p>Meetings at various locations every 2 months.  A yearly release, in June.</p>
-            <p>“ES6” ➡️ ES2015, “ES7” ➡️ ES2016, and now we say ES2017, etc.</p>
-            <p>It’s all <a href="https://github.com/tc39">public</a>. Language proposals go through <a href="https://tc39.github.io/process-document/">5 stages</a>:</p>
+            <p>Meetings at various locations every 2 months.  A yearly release, usually in June.</p>
+            <p>“ES6” ➡️ ES2015, “ES7” ➡️ ES2016,<br/>and now we say ES2017, etc.</p>
+            <p>It’s all <a href="https://github.com/tc39">public</a>.</p>
+          </section>
 
-            <table>
+          <section>
+            <h2>The TC39 process</h2>
+
+            <p>Language proposals go through <a href="https://tc39.github.io/process-document/">5 stages</a>:</p>
+
+            <table class="condensed">
               <thead>
                 <tr><th>Stage</th><th>Description</th></tr>
               </thead>
@@ -126,19 +134,19 @@ const christophe = {
                   <th>0 Strawman</th>
                   <td>“It’d be dandy if we had a unicorn operator (🦄) to…”</td>
                 </tr>
-                <tr>
+                <tr class="fragment">
                   <th>1 Proposal</th>
                   <td>A TC39 member “champions” the proposal.  General API look and feel hammered down, and many/most cross-cutting concerns addressed.</td>
                 </tr>
-                <tr>
+                <tr class="fragment">
                   <th>2 Draft</th>
                   <td>Initial spec text, covers all critical aspects and technical semantics.</td>
                 </tr>
-                <tr>
+                <tr class="fragment">
                   <th>3 Candidate</th>
                   <td>Spec complete, verified by appropriate reviewers and greenlighted.  API finalized, no stone left unturned.</td>
                 </tr>
-                <tr>
+                <tr class="fragment">
                   <th>4 Finished</th>
                   <td>Full Test262 coverage, 2+ shipping implementations (e.g. V8 + SpiderMonkey), significant real-world usage feedback, Spec Editor imprimatur.  Usually goes into the next feature freeze (January or March).</td>
                 </tr>
@@ -185,7 +193,7 @@ yowza(
               </div>
             </div>
 
-            <p>Don’t forget that since ES5 (2009…) you could already do these:</p>
+            <p>Remember: ES5 (2009…) already let you do these:</p>
 
             <div class="two-columns">
               <div>
@@ -248,7 +256,7 @@ const [tags, entryCount, entries] = <u>await</u> Promise.all([
 
             <p>Easily queue / loop over async requests.<br/>Async iterables, iterators and generators use promises, so <code>async</code>/<code>await</code> work seamlessly with it.</p>
 
-            <div class="two-columns">
+            <div class="two-columns with-code">
               <div>
                 <pre><code class="language-js" data-trim data-keep-tags="u">
 for <u>await</u> (const line of readLines(filePath)) {
@@ -286,7 +294,8 @@ for <u>await</u> (const line of readLines(filePath)) {
             <pre><code class="language-js" data-trim data-keep-tags="u">
 // nonStandardAction = { type: 'progress', goalId: 1, increment: 2 }
 
-const { type, <u>...</u>payload } = nonStandardAction // => payload = { goalId: 1, increment: 2 }
+const { type, <u>...</u>payload } = nonStandardAction
+// => payload = { goalId: 1, increment: 2 }
             </code></pre>
 
             <pre><code class="language-js" data-trim data-keep-tags="u">
@@ -304,11 +313,30 @@ return {
   todaysProgress: {},
 }
             </code></pre>
+          </section>
+
+          <section id="rest-spread-properties-2">
+            <h2>Rest / Spread Properties</h2>
+            <h4><a href="https://github.com/tc39/proposal-object-rest-spread">Spec</a></h4>
 
             <p>
               This is a new <strong>default</strong> behavior:
               you could already implement <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/iterator">custom iterability</a> for your objects.
             </p>
+
+            <pre><code class="language-js" data-trim data-keep-tags="u">
+class SuperDuper {
+  <u>[Symbol.iterator]()</u> {
+    // Prep and return an Iterator-compliant object:
+    return {
+      <u>next()</u> {
+        // …
+        return <u>{ done, value }</u>
+      }
+    }
+  }
+}
+            </code></pre>
 
             <footer>
               Native: FF 57+, Ch63+, SF 11.1, Node 8. No Edge yet.<br/>
@@ -329,8 +357,11 @@ return {
 
             <pre><code class="language-js" data-trim data-keep-tags="u">
 const RE_ISO_DATE = /(?<u>&lt;year></u>\d{4})-(?<u>&lt;month></u>\d{2})-(?<u>&lt;day></u>\d{2})/u
-console.log(RE_ISO_DATE.exec('2017-10-05')<u>.groups</u>) // => { year: '2017', month: '10', day: '05' }
-'2017-10-05'.replace(RE_ISO_DATE, '<u>$&lt;day></u>/<u>$&lt;month></u>/<u>$&lt;year></u>') // => '05/10/2017'
+console.log(RE_ISO_DATE.exec('2017-10-05')<u>.groups</u>)
+// => { year: '2017', month: '10', day: '05' }
+
+'2017-10-05'.replace(RE_ISO_DATE, '<u>$&lt;day></u>/<u>$&lt;month></u>/<u>$&lt;year></u>')
+// => '05/10/2017'
 
 const RE_DIGITS = /^<u>\p{Decimal_Number}</u>+$/u
 RE_DIGITS.test('𝟏𝟐𝟑𝟜𝟝𝟞𝟩𝟪𝟫𝟬𝟭𝟮𝟯𝟺𝟻𝟼') // => true
@@ -362,26 +393,25 @@ fetch('/api/v1/ohai')
   <u>.finally(…)</u>
             </code></pre>
 
-            <p>Illegal escape sequences in tagged template strings (TTS) don’t break, they just invoke the tagger with no cooked fixed string, only the raw one, so you can do this:</p>
+            <p>Illegal escape sequences in tagged template strings (TTS) don’t break, they only pass the raw string, so you can do this:</p>
 
             <pre><code class="language-js" data-trim data-keep-tags="u">
 latex`\unicode`             // Despite \un not being a valid Unicode escape
 windowsPath`C:\uuu\xxx\088` // Despite \uu, \xx and \08 not being valid escapes
             </code></pre>
 
-            <p class="breathing">P.S.: you’ll find all of ES2018 explained well in <a href="http://exploringjs.com/es2018-es2019/">this book</a> by Dr. Axel Rauschmayer (free online).</p>
-
              <footer>
                Native: FF58+, Ch63+, SF 11.1. No Edge or Node yet.<br/>
-               Babel: <code>preset-env</code> (<code>shippedProposals</code>) for Promise#finally.  Nothing for revised TTS.
+               Babel: <code>preset-env</code> (<code>shippedProposals</code>) for Promise#finally.  Nothing for revised TTS.<br/>
+               Also, check out <a href="http://exploringjs.com/es2018-es2019/">this book</a> for great ES2018 explanations.
              </footer>
           </section>
         </section> <!-- #es2018 -->
 
         <section data-state="theme-color-blue-yellow">
           <section id="es2019-es2020">
-            <h1>ES0219 and ES2020</h1>
-            <h3>chosen bits that’ll probably show up (stages 2–3)</h3>
+            <h1>ES0219 &amp; ES2020</h1>
+            <h4>chosen bits that’ll probably show up (stages 2–3)</h4>
 
             <footer>(Next to no native support just now, FYI)</footer>
           </section>
@@ -415,7 +445,7 @@ class APIConnector extends Component {
             <h2>Private methods and accessors</h2>
             <h4><a href="https://github.com/tc39/proposal-private-methods">Spec</a></h4>
 
-            <p>La continuation logique des champs privés…</p>
+            <p>Just a follow-up on private fields…</p>
 
             <pre><code class="language-js" data-trim data-keep-tags="u">
 class APIConnector {
@@ -438,7 +468,7 @@ class APIConnector {
             <h2><code>import(…)</code></h2>
             <h4><a href="https://github.com/tc39/proposal-dynamic-import">Dynamic import</a></h4>
 
-            <p> Lets us lazily import native ES modules (dynamic specifier / code splitting). </p>
+            <p>Lazily import native ESM (dynamic specifier / code splitting). </p>
 
             <pre><code class="language-js" data-trim data-keep-tags="u">
 import(`./l10n/${currentUser.locale}`)
@@ -509,7 +539,7 @@ function getEncoder(encoding) {
             <h2>Decorators</h2>
             <h4><a href="https://github.com/tc39/proposal-decorators">Spec</a></h4>
 
-            <div class="two-columns">
+            <div class="two-columns with-code">
               <div>
                 <pre><code class="language-js" data-trim data-keep-tags="u">
 <u>@mixin</u>(SocialNetworkAddictMixin)
@@ -555,7 +585,7 @@ class SettingsScreen extends Component {
             <h2>Numeric separator</h2>
             <h4><a href="https://github.com/tc39/proposal-numeric-separator">Spec</a></h4>
 
-            <p>Because JS is one of the few major languages without them! 😠</p>
+            <p>Because most major languages have them! 😠</p>
 
             <pre><code class="language-js" data-trim data-keep-tags="u">
 const FACTOR = <u>1_000_000_000</u>
@@ -574,8 +604,8 @@ const FLAG = <u>0xDEAD_BEEF</u>
 
         <section data-state="theme-color-silver-green">
           <section id="esnext">
-            <h1>Later (maybe)</h1>
-            <h3>(stage 1)</h3>
+            <h1>Later</h1>
+            <h4>(maybe; stage 1)</h4>
           </section>
 
           <section id="optional-chaining">
@@ -607,14 +637,14 @@ const chunkMode = settings.optimization?.splitChunks?.chunks <u>??</u> 'async'
             <h2>Véritables protocoles</h2>
             <h4><a href="https://github.com/michaelficarra/proposal-first-class-protocols">First-class protocols</a></h4>
 
-            <div class="two-columns">
+            <div class="two-columns with-code">
               <div>
                 <pre><code class="language-js" data-trim data-keep-tags="u">
 <u>protocol</u> RubyStyleEnumerable {
-  // Symbole(s) à implémenter au cas par cas
+  // Symbol(s) to implement per-case
   _each
 
-  // Méthodes (implémentées) par-dessus
+  // (Implemented) methods on top of these
   cycle (…) { … }
   count () { … }
   drop (…) { … }
@@ -627,16 +657,16 @@ const chunkMode = settings.optimization?.splitChunks?.chunks <u>??</u> 'async'
               <div>
                 <pre><code class="language-js" data-trim data-keep-tags="u">
 class Hash <u>implements RubyStyleEnumerable</u> {
-  // On implémente le symbole à notre sauce…
+  // Implement the symbol your way…
   [RubyStyleEnumerable._each] () { … }
 
-  // …et on a le reste gratuitement 😉
+  // …get the rest for free 😉
 }
                 </code></pre>
               </div>
             </div>
 
-            <p>Another proposal, <a href="https://github.com/justinfagnani/proposal-mixins">maximally-minimal mixins</a>, covers some of the same needs.<br/>A unified proposal should emerge for stage 2.</p>
+            <p>Another proposal, <a href="https://github.com/justinfagnani/proposal-mixins">maximally-minimal mixins</a>, covers some of the same needs. Unified proposal should emerge for stage 2.</p>
           </section>
 
           <section id="do-expressions">
@@ -687,11 +717,11 @@ return (
           </section>
 
           <section id="pipeline">
-            <h2>Pipeline operator (FP FTW #1)</h2>
-            <h4><a href="https://github.com/tc39/proposal-pipeline-operator">Spec</a></h4>
+            <h2>Pipeline operator</h2>
+            <h4> (FP FTW #1) <a href="https://github.com/tc39/proposal-pipeline-operator">Spec</a></h4>
 
             <p>Super-readable function composition.  Inspired by similar features in OCaml, Elixir, Elm, F#…</p>
-            <p>Syntax is extremely in flux (<a href="https://github.com/tc39/proposal-pipeline-operator/wiki">4 competing proposals</a>).  Here’s an example:</p>
+            <p>Syntax is extremely in flux (<a href="https://github.com/tc39/proposal-pipeline-operator/wiki">4 competing proposals</a>).<br/>Here’s an example:</p>
 
             <pre><code class="language-js" data-trim data-keep-tags="u">
 // Old-school
@@ -699,17 +729,17 @@ const result = exclaim(capitalize(doubleSay('hello')))
 
 // Hip
 const result = 'hello'
-  |> doubleSay
-  |> capitalize
-  |> exclaim
+  <u>|></u> doubleSay
+  <u>|></u> capitalize
+  <u>|></u> exclaim
             </code></pre>
           </section>
 
           <section id="partial-application">
-            <h2>Partial application (FP FTW #2)</h2>
-            <h4><a href="https://github.com/tc39/proposal-partial-application">Spec</a></h4>
+            <h2>Partial application</h2>
+            <h4>(FP FTW #2) <a href="https://github.com/tc39/proposal-partial-application">Spec</a></h4>
 
-            <p>Avoids hacky <code>bind(…)</code> usage.  Much more readable, can be done <em>ad hoc</em>, etc:</p>
+            <p>Avoids hacky <code>bind(…)</code> usage.  Can be done <em>ad hoc</em>, etc:</p>
 
             <pre><code class="language-js" data-trim data-keep-tags="u">
 const mul = (x, y) => x * y
@@ -719,7 +749,7 @@ const fx = (prefix, seed, ...items)
 const oneSeededFx = fx(<u>?</u>, 1, <u>...</u>)
             </code></pre>
 
-            <p>Actually super advanced, <strong>lazy evals its binding context</strong> and arguments.<br/>
+            <p>Actually super advanced, <strong>lazy evals its binding context</strong> and arguments.
               Also combines <strong>deliciously</strong> with pipelines:</p>
 
             <pre><code class="language-js" data-trim data-keep-tags="u">
@@ -730,8 +760,9 @@ const newScore = player.score
           </section>
 
           <section id="function-binding">
-              <h2>Function binding (FP FTW #3)</h2>
+              <h2>Function binding</h2>
               <h4>
+                (FP FTW #3)
                 <a href="https://github.com/tc39/proposal-bind-operator">Spec</a>
                 • Warning: STAGE ZERO!
               </h4>
@@ -751,8 +782,9 @@ getPlayers()
             </section>
 
             <section id="pattern-matching">
-              <h2>Pattern matching (FP FTW #4</h2>
+              <h2>Pattern matching</h2>
               <h4>
+                (FP FTW #4)
                 <a href="https://github.com/tc39/proposal-pattern-matching">Spec</a>
                 • Warning: STAGE ZERO!
               </h4>
@@ -783,6 +815,8 @@ const getLength = (vector) => <u>match (vector)</u> {
           <p class="breathing">
             Slides are up at <a href="http://bit.ly/confoo-es2020">bit.ly/confoo-es2020</a><br/>
           </p>
+
+          <p><small><a href="https://joind.in/talk/e8ec5">https://joind.in/talk/e8ec5</a></small></p>
         </section>
 
 			</div>
